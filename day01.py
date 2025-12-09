@@ -1,6 +1,6 @@
 zero_count = 0
 current_pos = 50
-with open("input-01-1.txt") as f:
+with open("input-01.txt") as f:
     for line in f:
         direction = line[0]
         distance = int(line[1:])
@@ -16,7 +16,7 @@ print(zero_count)
 zero_count = 0
 current_pos = 50
 
-with open("input-01-1.txt") as f:
+with open("input-01.txt") as f:
     for line in f:
         direction = line[0]
         distance = int(line[1:])
