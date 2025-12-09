@@ -5,7 +5,7 @@ def area(t1, t2):
 
 
 with open("input-09.txt") as f:
-    tiles = [ [int(x) for x in pair.strip().split(",")] for pair in f.readlines()]
+    tiles = [ tuple([int(x) for x in pair.strip().split(",")]) for pair in f.readlines()]
 
 max_size = -1
 for i in range(len(tiles)):
@@ -82,31 +82,56 @@ def fill_outer_edge(boundary, test_point):
                 edge_queue.append(pt)
     return edge
 
+def cast_to_bad(point, bad_points, max_x, max_y):
+    right = max_x
+    for x in range(point[0]+1, max_x + 1):
+        if (x, point[1]) in bad_points:
+            right = x-1
+            break
+
+    up = 0
+    for y in range(point[1]-1, -1, -1):
+        if (point[0], y) in bad_points:
+            up = y+1
+            break
+    
+    down = max_y
+    for y in range(point[1] + 1, max_y + 1):
+        if (point[0], y) in bad_points:
+            down = y-1
+
+    return right, up, down
+
+
 
 pairs = [ (tiles[i], tiles[i+1]) for i in range(len(tiles)-1)]
 pairs.append((tiles[-1], tiles[0]))
 
+tiles.sort(key=lambda x: x[0])
+
 edge_points = set()
 max_x_pair = None
 max_x = -1
+max_y = -1
 for v1, v2 in pairs:
     edge_points.update(get_points_on_edge(v1, v2))
     if v1[0] == v2[0] and v1[0] > max_x:
         max_x = v1[0]
         max_x_pair = v1, v2
+    if v1[1] > max_y:
+        max_y = v1[1]
 test_y_coord = min(max_x_pair[0][1], max_x_pair[1][1]) + 1
 test_point = max_x+1, test_y_coord
-
-print(len(edge_points))
 
 outer_border = fill_outer_edge(edge_points, test_point)
 
 max_area = -1
-print(len(tiles))
 for i in range(len(tiles)):
+    right_bd, up_bd, down_bd = cast_to_bad(tiles[i], outer_border, max_x, max_y)
     for j in range(i+1, len(tiles)):
+        if tiles[j][0] > right_bd or tiles[j][1] < up_bd or tiles[j][1] > down_bd:
+            continue
         if area(tiles[i], tiles[j]) > max_area:
-            print(f"Possible new max at {i}, {j} - {area(tiles[i], tiles[j])} > {max_area}")
             ok = True
             #check for bad tiles
             for perim_pt in get_perimeter_points(tiles[i], tiles[j]):
@@ -115,6 +140,5 @@ for i in range(len(tiles)):
                     break
             if ok:
                 max_area = area(tiles[i], tiles[j])
-                print(f"New max area {max_area} - {i}, {j} - {tiles[i]}, {tiles[j]}")
 
 print(max_area)
