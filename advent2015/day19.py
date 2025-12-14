@@ -82,7 +82,6 @@ with open("input-19.txt") as f:
 rules: Dict[str, List[List[str]]] = defaultdict(list)
 binary_rules: Dict[str, List[Rule]] = defaultdict(list)
 
-e_targets: List[List[str]] = []
 for rule in lines[:-2]:
     src, target = parse_rule(rule)
     rules[src].append(target)
