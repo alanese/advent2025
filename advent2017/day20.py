@@ -113,7 +113,6 @@ intersections: dict[int, list[tuple[int, int]]] = defaultdict(list)
 max_intersection_time: int = 0
 for i, particle1 in enumerate(particles):
     for j, particle2 in enumerate(particles[i+1:], start=i+1):
-        print(f"{i}, {j}")
         for t in particle1.intersections(particle2):
             intersections[t].append((i,j))
             if t > max_intersection_time:
@@ -129,8 +128,6 @@ for t in range(max_intersection_time + 1):
         if p1 in remaining and p2 in remaining:
             to_remove.add(p1)
             to_remove.add(p2)
-    print(f"Time {t}, removing {to_remove}")
     remaining -= to_remove
 
-print(remaining)
 print(len(remaining))
