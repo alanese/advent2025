@@ -4,17 +4,20 @@ def find_zeroes(secret: bytes, count: int):
     i = 0
     while True:
         i += 1
-        data = secret + bytes(str(i), 'ascii')
-        digest = hashlib.md5(data).hexdigest()
+        input_data = secret + bytes(str(i), 'ascii')
+        digest = hashlib.md5(input_data).hexdigest()
         if digest[:count] == "0"*count:
             return i
 
 
 with open("input-04.txt", 'rb') as f:
-    secret = f.read()
+    data = f.read()
 
-print(find_zeroes(secret, 5))
-print(find_zeroes(secret, 6))
+#Part 1
+print(find_zeroes(data, 5))
+
+#Part 2
+print(find_zeroes(data, 6))
 
 #-------
 #while True:

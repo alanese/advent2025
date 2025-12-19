@@ -13,13 +13,17 @@ def parse_part2(edges):
 
     return min(perim_1, perim_2, perim_3) + vol
 
-total_p1 = 0
-total_p2 = 0
 with open("input-02.txt") as f:
-    for line in f:
-        box = [int(x) for x in line.strip().split('x')]
-        total_p1 += parse_part1(box)
-        total_p2 += parse_part2(box)
+    data = [line.strip() for line in f]
 
+#Part 1
+total_p1 = 0
+for line in data:
+    total_p1 += parse_part1([int(x) for x in line.split("x")])
 print(total_p1)
+
+#Part 2
+total_p2 = 0
+for line in data:
+    total_p2 += parse_part2([int(x) for x in line.split("x")])
 print(total_p2)

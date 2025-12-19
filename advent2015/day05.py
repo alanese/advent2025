@@ -3,6 +3,7 @@ BAD_PAIRS = (('a', 'b'),
              ('c', 'd'),
              ('p', 'q'),
              ('x', 'y'))
+
 def is_nice_p1(check_string: str) -> bool:
     vowel_count = 0
     double = False
@@ -29,15 +30,20 @@ def is_nice_p2(check_string: str) -> bool:
 
     return one_between and double_pair
 
-nice_p1_count = 0
-nice_p2_count = 0
 
 with open("input-05.txt") as f:
-    for line in f:
-        if is_nice_p1(line.strip()):
-            nice_p1_count += 1
-        if is_nice_p2(line.strip()):
-            nice_p2_count += 1
+    data = [line.strip() for line in f]
 
+#Part 1
+nice_p1_count = 0
+for line in data:
+    if is_nice_p1(line):
+        nice_p1_count += 1
 print(nice_p1_count)
+
+#Part 2
+nice_p2_count = 0
+for line in data:
+    if is_nice_p2(line):
+        nice_p2_count += 1
 print(nice_p2_count)

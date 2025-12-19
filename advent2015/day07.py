@@ -1,4 +1,3 @@
-from typing import Dict
 from dataclasses import dataclass
 
 @dataclass
@@ -6,7 +5,7 @@ class Wire:
     source: str
     value: int | None
 
-def parse_argument(argument: str, network: Dict[str, Wire]) -> int:
+def parse_argument(argument: str, network: dict[str, Wire]) -> int:
     if argument.isnumeric():
         return int(argument)
     else:
@@ -14,30 +13,30 @@ def parse_argument(argument: str, network: Dict[str, Wire]) -> int:
             network[argument].value = retrieve_value(argument, network)
         return network[argument].value
 
-def parse_not(argument:str, network: Dict[str, Wire]) -> int:
+def parse_not(argument:str, network: dict[str, Wire]) -> int:
     return (~parse_argument(argument, network)) % 65536
 
-def parse_and(arg1: str, arg2: str, network: Dict[str, Wire]) -> int:
-    arg1 = parse_argument(arg1, network)
-    arg2 = parse_argument(arg2, network)
-    return arg1 & arg2
+def parse_and(arg1: str, arg2: str, network: dict[str, Wire]) -> int:
+    arg1_int = parse_argument(arg1, network)
+    arg2_int = parse_argument(arg2, network)
+    return arg1_int & arg2_int
 
-def parse_or(arg1: str, arg2: str, network: Dict[str, Wire]) -> int:
-    arg1 = parse_argument(arg1, network)
-    arg2 = parse_argument(arg2, network)
-    return arg1 | arg2
+def parse_or(arg1: str, arg2: str, network: dict[str, Wire]) -> int:
+    arg1_int = parse_argument(arg1, network)
+    arg2_int = parse_argument(arg2, network)
+    return arg1_int | arg2_int
 
-def parse_lshift(arg1: str, arg2: str, network: Dict[str, Wire]) -> int:
-    arg1 = parse_argument(arg1, network)
-    arg2 = parse_argument(arg2, network)
-    return (arg1 << arg2) % 65536
+def parse_lshift(arg1: str, arg2: str, network: dict[str, Wire]) -> int:
+    arg1_int = parse_argument(arg1, network)
+    arg2_int = parse_argument(arg2, network)
+    return (arg1_int << arg2_int) % 65536
 
-def parse_rshift(arg1: str, arg2: str, network: Dict[str, Wire]) -> int:
-    arg1 = parse_argument(arg1, network)
-    arg2 = parse_argument(arg2, network)
-    return (arg1 >> arg2) % 65536
+def parse_rshift(arg1: str, arg2: str, network: dict[str, Wire]) -> int:
+    arg1_int = parse_argument(arg1, network)
+    arg2_int = parse_argument(arg2, network)
+    return (arg1_int >> arg2_int) % 65536
 
-def retrieve_value(wire: str, network: Dict[str, Wire]) -> int:
+def retrieve_value(wire: str, network: dict[str, Wire]) -> int:
     if network[wire].value is not None:
         return network[wire].value
     
@@ -60,18 +59,25 @@ def retrieve_value(wire: str, network: Dict[str, Wire]) -> int:
 
     return network[wire].value
 
+with open("input-07.txt") as f:
+    data = [line.strip() for line in f]
+
+
+#Part 1
 network = {}
 
-with open("input-07.txt") as f:
-    for line in f:
-        line = line.strip().split(" -> ")
-        network[line[1]] = Wire(line[0], None)
+for line in data:
+    line = line.strip().split(" -> ")
+    network[line[1]] = Wire(line[0], None)
 
 a_value = retrieve_value("a", network)
 print(a_value)
 
-for wire in network:
-    network[wire].value = None
+#Part 2
+network = {}
+for line in data:
+    line = line.strip().split(" -> ")
+    network[line[1]] = Wire(line[0], None)
 network["b"].source = str(a_value)
 
 print(retrieve_value("a", network))
