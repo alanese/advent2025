@@ -41,16 +41,12 @@ direction: Direction = Direction.SOUTH
 seen: str = ""
 steps: int = 0
 
-while 0 <= x < len(data[0]) and 0 <= y < len(data):
-    if data[y][x] in VALID_SYMBOLS:
-        steps += 1
+while data[y][x] != " ":
+    steps += 1
     x, y = step(x, y, direction)
-    #print(f"At ({x}, {y})")
     if data[y][x] == "+":
         direction = turn(x, y, direction, data)
-        #print(f"Turning to {direction}")
     elif data[y][x] in CAPITALS:
-        #print(f"Found {data[y][x]}")
         seen += data[y][x]
 print(seen)
 print(steps)
