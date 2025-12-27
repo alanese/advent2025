@@ -1,3 +1,4 @@
+#Functions brought over from 2016 day 15
 def bezout(x: int, y: int) -> tuple[int, int]:
     """
     Docstring for bezout
@@ -43,21 +44,28 @@ def chinese_remainder(congruences: list[tuple[int, int]]) -> int:
     x: int = (a1*m2*n2 + a2*m1*n1) % (n1*n2)
     return chinese_remainder( [(x, n1*n2)] + congruences[2:])
 
+with open("input-13.txt") as f:
+    earliest_departure: int = int(f.readline().strip())
+    bus_ids: list[str] = f.readline().strip().split(",")
 
-pos_counts: list[int] = []
-equivalents: list[int] = []
-with open("input-15.txt") as f:
-    for t, line in enumerate(f, start=1):
-        line_split: list[str] = line.split()
-        pos_count: int = int(line_split[3])
-        pos_counts.append(pos_count)
-        start_pos: int = int(line_split[-1][:-1])
-        #x + init_pos + t ~ pos_count
-        #x ~ pos_count - init_pos - t
-        equivalents.append((pos_count - start_pos - t) % pos_count)
+#Part 1
+bus_id_nums: list[int] = [int(x) for x in bus_ids if x != "x"]
 
-print(chinese_remainder(list(zip(equivalents, pos_counts))))
+earliest_buses: list[tuple[int, int]] = []
+for id in bus_id_nums:
+    next_bus: int = 0
+    while next_bus < earliest_departure:
+        next_bus += id
+    earliest_buses.append((next_bus, id))
 
-pos_counts.append(11)
-equivalents.append(11-(len(equivalents)+1))
-print(chinese_remainder(list(zip(equivalents, pos_counts))))
+best_bus: tuple[int, int] = sorted(earliest_buses)[0]
+score = best_bus[1] * (best_bus[0] - earliest_departure)
+print(score)
+
+#Part 2
+congruences: list[tuple[int, int]] = []
+for i, num in enumerate(bus_ids):
+    if num != "x":
+        id_num: int = int(num)
+        congruences.append(((-i) % id_num, id_num))
+print(chinese_remainder(congruences))
