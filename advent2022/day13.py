@@ -30,12 +30,6 @@ class Unit:
             return len(self.value) < len(other.value)
         else:
             raise ValueError("Invalid values")
-    
-    def __str__(self: Unit) -> str:
-        if isinstance(self.value, int):
-            return str(self.value)
-        else:
-            return "[" + ",".join(str(sub) for sub in self.value) + "]"
         
 REGEX: re.Pattern = re.compile(r"\[|\]|\d+")
 def tokenize(packet: str) -> list[str]:
